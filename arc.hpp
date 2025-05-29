@@ -5,9 +5,13 @@
 #include <thread>
 #include <chrono>
 #include <array>
+#include <complex>
+#include <vector>
 
 #define tlog(x) std::cout << x << std::endl;
 #define errlog(x) std::cerr << x << std::endl;
+
+const float pi = acos(-1);
 
 namespace arc
 {
@@ -230,15 +234,17 @@ namespace arc
 
 	// vortex - utilities
 	
-	namespace v_opt // TO DO: ADD MORE
+	namespace vortex // TO DO: ADD MORE
 	{
-		struct swap
+		namespace opt
 		{
+			struct swap
+			{
 			public:
-			int x, y;
+				int x, y;
 				swap(int x, int y) : x(x), y(y) {}
 
-				swap operator&&(const swap & ott)
+				swap operator&&(const swap& ott)
 				{
 					return swap(x = ott.y, y = ott.x);
 				}
@@ -247,10 +253,10 @@ namespace arc
 				{
 					std::cout << "(" << x << ", " << y << ")";
 				}
-		};
+			};
 
-		struct shift
-		{
+			struct shift
+			{
 			public:
 				int x, y, z;
 				shift(int x, int y, int z) : x(x), y(y), z(z) {}
@@ -264,10 +270,10 @@ namespace arc
 				{
 					std::cout << "(" << x << ", " << y << ", " << ")";
 				}
-		};
+			};
 
-		struct expo
-		{
+			struct expo
+			{
 			public:
 				int x, n, out;
 				expo(int x, int n, int out) : x(x), n(n), out(out) {}
@@ -285,47 +291,87 @@ namespace arc
 				{
 					std::cout << out << std::endl;
 				}
-		};
+			};
 
-		float sqroot(float _x) // SQR ROOT FUNCTION using Newton-Raphson Method
-		{
-			if (_x < 0.0f) {
-				errlog("complex-plane: arg < 0");
-				return EXIT_FAILURE;
-			}
-
-			float guess = _x / 2.0f;
-			float epsilon = 0.00000001f;
-
-			while (abs(guess * guess - 1) > epsilon)
+			float sqroot(float _x) // SQR ROOT FUNCTION using Newton-Raphson Method
 			{
-				guess = (guess + _x / guess) / 2.0f;
-			}
+				if (_x < 0.0f) {
+					errlog("complex-plane: arg < 0");
+					return EXIT_FAILURE;
+				}
 
-			return guess;
+				float guess = _x / 2.0f;
+				float epsilon = 0.00000001f;
+
+				while (abs(guess * guess - 1) > epsilon)
+				{
+					guess = (guess + _x / guess) / 2.0f;
+				}
+
+				return guess;
+			}
 		}
 	}
 
 	// complex numbers - lets see how it goes
 
 
-#define iota v_opt::sqroot(-1)
+//#define iota v_opt::sqroot(-1)
+
+	constexpr std::complex<float> iota{ 0.0f, 1.0f };
 
 	namespace complex_plane
 	{
 		struct complex
 		{
 			public:
-				float real_comp, im_comp, comp_val;
-				complex(float _real_comp, float _im_comp) : real_comp(_real_comp), im_comp(_im_comp)
+				std::complex<float> real_comp, im_comp, comp_val;
+				complex(const std::complex<float>& _real_comp, const std::complex<float>& _im_comp) : real_comp(_real_comp), im_comp(_im_comp)
 				{
 					comp_val = _real_comp + _im_comp * iota;
 					tlog("success: complex number defined.");
 					EXIT_SUCCESS;
 				}
-
-				auto err() { errlog("failure: complex number not created."); return EXIT_FAILURE; }
 		};
+
+		std::complex<float> iabs(const complex& value)
+		{
+			return std::sqrt(value.real_comp * value.real_comp + value.im_comp * value.im_comp);
+		}
+
+		std::complex<float> conjugate(const complex& z)
+		{
+			return z.comp_val * std::complex<float> {1, -1};
+		}
 	}
 
+	namespace algorithms
+	{
+		using Complex = std::complex<float>;
+		using CArr = std::vector<Complex>;
+
+		void fft(CArr& x)
+		{
+			std::size_t N = x.size();
+			if (N <= 1) return;
+
+			CArr even(N / 2), odd(N / 2);
+			
+			for (size_t i = 0; i < N / 2; ++i)
+			{
+				even[i] = x[i * 2];
+				odd[i] = x[i * 2 + 1];
+
+				fft(even);
+				fft(odd);
+
+				for (size_t k = 0; k < N / 2; ++k) {
+					Complex t = std::polar<float>(1.0, -2 * pi * k / N) * odd[k];
+					x[k] = even[k] + t;
+					x[k + N / 2] = even[k] - t;
+				}
+
+			}
+		}
+	}
 }

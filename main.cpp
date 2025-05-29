@@ -28,27 +28,26 @@ void main()
 	/*int x = 1;
 	int y = 0;
 
-	arc::v_opt::swap sw(x, y);
-	arc::v_opt::swap swped(x, y);
-	arc::v_opt::swap final = sw && swped;
+	arc::vortex::opt::swap sw(x, y);
+	arc::vortex::opt::swap swped(x, y);
+	arc::vortex::opt::swap final = sw && swped;
 
 	int a = 3;
 	int b = 2;
 	int out = 1;
 
-	arc::v_opt::expo exponent1(a, b, out);
-	arc::v_opt::expo exponent2(a, b, out);
+	arc::vortex::opt::expo exponent1(a, b, out);
+	arc::vortex::opt::expo exponent2(a, b, out);
 
-	arc::v_opt::expo _o = (exponent1 ^ exponent2);
+	arc::vortex::opt::expo _o = (exponent1 ^ exponent2);
 	_o.log();
 	
 
 	final.log();*/
 
 	arc::complex_plane::complex complex_number = arc::complex_plane::complex(1.0f, 2.0f);
-
-
-
+	tlog(arc::complex_plane::iabs(complex_number));
+	tlog(arc::complex_plane::conjugate(complex_number));
 
 	std::cin.get();
 	exit(1);
