@@ -2,17 +2,19 @@
 
 void main()
 {
-	//arc::fvec3 v1 = arc::fvec3(1.0f, 1.0f, 1.0f);
-	//arc::fvec3 v2 = arc::fvec3(-1.0f, 1.0f, -1.0f);
+	arc::vec3<float> v1 = arc::vec3<float>(1.0f, 1.0f, 1.0f);
+	arc::vec3<float> v2 = arc::vec3<float>(-1.0f, 1.0f, -1.0f);
 
-	//arc::fvec3 v_o = arc::operators::Add(v1, v2);
-	//arc::fvec3 v_n = arc::operators::normalize(v_o);
+	float dot = arc::operators::dot_product(v1, v2);
+	tlog(dot + 1);
+
+	
 
 	//auto init_ = arc::time::elapsed_init();
 	//arc::time::delay();
 
 	//float dot = arc::operators::dot_product(v1, v2);
-	//arc::fvec3 cross = arc::operators::cross_product(v1, v2);
+	//arc::vec3<_type> cross = arc::operators::cross_product(v1, v2);
 
 	//auto final_ = arc::time::elapsed_final();
 	//arc::time::delay();
@@ -32,22 +34,9 @@ void main()
 	arc::vortex::opt::swap swped(x, y);
 	arc::vortex::opt::swap final = sw && swped;
 
-	int a = 3;
-	int b = 2;
-	int out = 1;
-
-	arc::vortex::opt::expo exponent1(a, b, out);
-	arc::vortex::opt::expo exponent2(a, b, out);
-
-	arc::vortex::opt::expo _o = (exponent1 ^ exponent2);
-	_o.log();
-	
-
 	final.log();*/
-
-	arc::complex_plane::complex complex_number = arc::complex_plane::complex(1.0f, 2.0f);
-	tlog(arc::complex_plane::iabs(complex_number));
-	tlog(arc::complex_plane::conjugate(complex_number));
+	
+	
 
 	std::cin.get();
 	exit(1);

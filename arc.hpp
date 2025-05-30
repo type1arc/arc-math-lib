@@ -7,6 +7,7 @@
 #include <array>
 #include <complex>
 #include <vector>
+#include <concepts>
 
 #define tlog(x) std::cout << x << std::endl;
 #define errlog(x) std::cerr << x << std::endl;
@@ -16,15 +17,18 @@ const float pi = acos(-1);
 namespace arc
 {
 	// data structures
-	struct fvec3 // For vectors in 3D space
+	template<typename _type>
+	concept numeric = std::is_arithmetic_v<_type>;
+	template<numeric _type>
+	struct vec3 // For vectors in 3D space
 	{
 	private:
-		std::tuple<float, float, float> vec_t;
+		std::tuple<_type, _type, _type> vec_t;
 
 	public:
 		float x, y, z;
 
-		fvec3(float x, float y, float z)
+		vec3<_type>(_type x, _type y, _type z)
 		{
 			this->x = x;
 			this->y = y;
@@ -35,9 +39,11 @@ namespace arc
 
 		void logv() { std::cout << "(" << x << ", " << y << ", " << z << ")" << std::endl; }
 		float mag() { return x + y + z; }
-		std::tuple<float, float, float> get() { return vec_t; }
+		std::tuple<_type, _type, _type> get() { return vec_t; }
 	};
-	struct fvec2 // For vectors in 2D space
+
+	template<numeric _type>
+	struct vec2 // For vectors in 2D space
 	{
 	private:
 		std::tuple<float, float> vec_t;
@@ -45,7 +51,7 @@ namespace arc
 	public:
 		float x, y;
 
-		fvec2(float x, float y)
+		vec2(float x, float y)
 		{
 			this->x = x;
 			this->y = y;
@@ -115,9 +121,10 @@ namespace arc
 	namespace operators
 	{
 		// vectors in 3D space
-		fvec3 Add(fvec3 v1, fvec3 v2)
+		template<numeric _type>
+		vec3<_type> Add(vec3<_type> v1, vec3<_type> v2)
 		{
-			fvec3 _out = fvec3
+			vec3<_type> _out = vec3<_type>
 			(
 				v1.x + v2.x,
 				v1.y + v2.y,
@@ -127,9 +134,10 @@ namespace arc
 			return _out;
 		}
 
-		fvec3 normalize(fvec3 v)
+		template<numeric _type>
+		vec3<_type> normalize(vec3<_type> v)
 		{
-			fvec3 _out = fvec3(
+			vec3<_type> _out = vec3<_type>(
 				v.x /= abs(v.x),
 				v.y /= abs(v.y),
 				v.z /= abs(v.z)
@@ -142,7 +150,8 @@ namespace arc
 			return _out;
 		}
 
-		fvec3 negate(fvec3 v)
+		template<numeric _type>
+		vec3<_type> negate(vec3<_type> v)
 		{
 			v.x *= -1;
 			v.y *= -1;
@@ -151,15 +160,16 @@ namespace arc
 			return v;
 		}
 
-
-		float dot_product(fvec3 v1, fvec3 v2)
+		template<numeric _type>
+		float dot_product(vec3<_type> v1, vec3<_type> v2)
 		{
 			return v1.mag() * v2.mag() * cos(atan2(v1.mag(), v2.mag()));
 		}
 
-		fvec3 cross_product(fvec3 v1, fvec3 v2)
+		template<numeric _type>
+		vec3<_type> cross_product(vec3<_type> v1, vec3<_type> v2)
 		{
-			fvec3 _out = fvec3(0.0f, 0.0f, 0.0f);
+			vec3<_type> _out = vec3<_type>(0.0f, 0.0f, 0.0f);
 			_out.x = v1.x * v2.x * sin(atan2(v1.mag(), v2.mag()));
 			_out.y = v1.y * v2.y * sin(atan2(v1.mag(), v2.mag()));
 			_out.z = v1.z * v2.z * sin(atan2(v1.mag(), v2.mag()));
@@ -168,9 +178,10 @@ namespace arc
 		}
 
 		// vectors in 2D space
-		fvec2 Add(fvec2 v1, fvec2 v2)
+		template<numeric _type>
+		vec2<_type> Add(vec2<_type> v1, vec2<_type> v2)
 		{
-			fvec2 _out = fvec2
+			vec2<_type> _out = vec2<_type>
 			(
 				v1.x + v2.x,
 				v1.y + v2.y
@@ -179,9 +190,10 @@ namespace arc
 			return _out;
 		}
 
-		fvec2 normalize(fvec2 v)
+		template<numeric _type>
+		vec2<_type> normalize(vec2<_type> v)
 		{
-			fvec2 _out = fvec2(
+			vec2<_type> _out = vec2<_type>(
 				v.x /= abs(v.x),
 				v.y /= abs(v.y)
 			);
@@ -192,7 +204,8 @@ namespace arc
 			return _out;
 		}
 
-		fvec2 negate(fvec2 v)
+		template<numeric _type>
+		vec2<_type> negate(vec2<_type> v)
 		{
 			v.x *= -1;
 			v.y *= -1;
@@ -200,14 +213,16 @@ namespace arc
 			return v;
 		}
 
-		float dot_product(fvec2 v1, fvec2 v2)
+		template<numeric _type>
+		float dot_product(vec2<_type> v1, vec2<_type> v2)
 		{
 			return v1.mag() * v2.mag() * cos(atan2(v1.mag(), v2.mag()));
 		}
 
-		fvec2 cross_product(fvec2 v1, fvec2 v2)
+		template<numeric _type>
+		vec2<_type> cross_product(vec2<_type> v1, vec2<_type> v2)
 		{
-			fvec2 _out = fvec2(0.0f, 0.0f);
+			vec2<_type> _out = vec2<_type>(0.0f, 0.0f);
 			_out.x = v1.x * v2.x * sin(atan2(v1.mag(), v2.mag()));
 			_out.y = v1.y * v2.y * sin(atan2(v1.mag(), v2.mag()));
 
@@ -238,11 +253,12 @@ namespace arc
 	{
 		namespace opt
 		{
+			template<numeric _type>
 			struct swap
 			{
 			public:
-				int x, y;
-				swap(int x, int y) : x(x), y(y) {}
+				_type x, y;
+				swap(_type x, _type y) : x(x), y(y) {}
 
 				swap operator&&(const swap& ott)
 				{
@@ -255,11 +271,12 @@ namespace arc
 				}
 			};
 
+			template<numeric _type>
 			struct shift
 			{
 			public:
-				int x, y, z;
-				shift(int x, int y, int z) : x(x), y(y), z(z) {}
+				_type x, y, z;
+				shift(_type x, _type y, _type z) : x(x), y(y), z(z) {}
 
 				shift operator>>(const shift& ott)
 				{
@@ -272,85 +289,87 @@ namespace arc
 				}
 			};
 
-			struct expo
+			template<numeric _type>
+			struct expo // UPDATED...
 			{
-			public:
-				int x, n, out;
-				expo(int x, int n, int out) : x(x), n(n), out(out) {}
+				public:
+					_type x;
+					expo(_type x) : x(x) {}
 
-				expo operator^(const expo& tis)
-				{
-					for (out = x; out < n; out++)
+					_type operator^(_type exponent)
 					{
-						out *= tis.n;
+						return std::pow(x, exponent);
 					}
-					return expo(x, n, out);
-				}
-
-				void log()
-				{
-					std::cout << out << std::endl;
-				}
 			};
 
-			float sqroot(float _x) // SQR ROOT FUNCTION using Newton-Raphson Method
-			{
-				if (_x < 0.0f) {
-					errlog("complex-plane: arg < 0");
-					return EXIT_FAILURE;
-				}
+			
+		}
 
-				float guess = _x / 2.0f;
-				float epsilon = 0.00000001f;
-
-				while (abs(guess * guess - 1) > epsilon)
-				{
-					guess = (guess + _x / guess) / 2.0f;
-				}
-
-				return guess;
+		template<numeric _type>
+		_type sqroot(_type _x) // SQR ROOT FUNCTION using Newton-Raphson Method
+		{
+			if (_x < 0.0f) {
+				errlog("complex-plane: arg < 0");
+				return EXIT_FAILURE;
 			}
+
+			_type guess = _x / 2.0f;
+			_type epsilon = 0.00000001f;
+
+			while (abs(guess * guess - 1) > epsilon)
+			{
+				guess = (guess + _x / guess) / 2.0f;
+			}
+
+			return guess;
 		}
-	}
 
-	// complex numbers - lets see how it goes
+		#define iota sqroot(-1)
 
 
-//#define iota v_opt::sqroot(-1)
-
-	constexpr std::complex<float> iota{ 0.0f, 1.0f };
-
-	namespace complex_plane
-	{
-		struct complex
+		// complex numbers - lets see how it goes
+		namespace complex_plane
 		{
-			public:
-				std::complex<float> real_comp, im_comp, comp_val;
-				complex(const std::complex<float>& _real_comp, const std::complex<float>& _im_comp) : real_comp(_real_comp), im_comp(_im_comp)
-				{
-					comp_val = _real_comp + _im_comp * iota;
-					tlog("success: complex number defined.");
-					EXIT_SUCCESS;
+			template<numeric _type>
+			struct complex
+			{
+				public:
+					std::tuple<_type, _type> value;
+					_type re_comp, im_comp;
+					complex(_type re_comp, _type im_comp) : re_comp(re_comp), im_comp(im_comp)
+					{
+						value = std::make_tuple(re_comp, im_comp);
+					}
+
+					_type iabs(std::tuple<_type, _type>& value)
+					{
+						return sqroot(re_comp * re_comp + im_comp * im_comp);
+					}
+
+					void log()
+					{
+						std::string sign;
+
+						if (std::get<1>(value) > 0)
+							sign = "+";
+						if (std::get<1>(value) < 0)
+							sign = "-";
+
+						std::cout << std::get<0>(value) << sign << std::get<1>(value) << "i" << std::endl;
 				}
-		};
-
-		std::complex<float> iabs(const complex& value)
-		{
-			return std::sqrt(value.real_comp * value.real_comp + value.im_comp * value.im_comp);
+			};
 		}
 
-		std::complex<float> conjugate(const complex& z)
-		{
-			return z.comp_val * std::complex<float> {1, -1};
-		}
+		
 	}
 
+	// algorithms
 	namespace algorithms
 	{
 		using Complex = std::complex<float>;
 		using CArr = std::vector<Complex>;
 
-		void fft(CArr& x)
+		void fft(CArr& x) // Fast-Fourier-Transform 
 		{
 			std::size_t N = x.size();
 			if (N <= 1) return;
