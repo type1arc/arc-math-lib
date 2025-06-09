@@ -1,3 +1,0 @@
-﻿  main.cpp
-C:\Users\Ashfaque\source\repos\arc_math_lib\arc_math_lib\main.cpp(3,6): warning C4326: return type of 'main' should be 'int' instead of 'void'
-  arc_math_lib.vcxproj -> C:\Users\Ashfaque\source\repos\arc_math_lib\x64\Debug\arc_math_lib.exe
