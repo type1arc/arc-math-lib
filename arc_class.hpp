@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <tuple>
 #include <math.h>
@@ -25,12 +27,10 @@ typedef uint16_t u16;
 typedef uint32_t u32;
 typedef uint64_t u64;
 
-typedef float flt;
-
 constexpr float pi = std::numbers::pi_v<float>;
 
 namespace arc
-{	
+{
 	// data classures
 	template<typename _type>
 	concept numeric = std::is_arithmetic_v<_type>;
@@ -53,7 +53,7 @@ namespace arc
 		}
 
 		void logv() { std::cout << "(" << x << ", " << y << ", " << z << ")" << std::endl; }
-		float mag() { return x + y + z; }
+		_type mag() { return x + y + z; }
 		std::tuple<_type, _type, _type> get() { return vec_t; }
 	};
 
@@ -61,12 +61,12 @@ namespace arc
 	class vec2 // For vectors in 2D space
 	{
 	private:
-		std::tuple<float, float> vec_t;
+		std::tuple<_type, _type> vec_t;
 
 	public:
-		float x, y;
+		_type x, y;
 
-		vec2(float x, float y)
+		vec2(_type x, _type y)
 		{
 			this->x = x;
 			this->y = y;
@@ -75,8 +75,8 @@ namespace arc
 		}
 
 		void logv() { std::cout << "(" << x << ", " << y << ")" << std::endl; }
-		float mag() { return x + y; }
-		std::tuple<float, float> get() { return vec_t; }
+		_type mag() { return x + y; }
+		std::tuple<_type, _type> get() { return vec_t; }
 	};
 
 	class mat3
@@ -84,29 +84,29 @@ namespace arc
 		int const rows = 3;
 		int const columns = 3;
 
-		public:
-			float mat[3][3];
+	public:
+		float mat[3][3];
 
 
-			mat3(float diag)
+		mat3(float diag)
+		{
+			int i = 0;
+			int row = 0;
+
+
+			while (row < 3)
 			{
-				int i = 0;
-				int row = 0;
-
-
-				while (row < 3)
+				i++;
+				if (i > 2)
 				{
-					i++;
-					if (i > 2)
-					{
-						i = 0;
-						row++;
-					}
-
-					mat[row][i] = 1;
-
+					i = 0;
+					row++;
 				}
+
+				mat[row][i] = 1;
+
 			}
+		}
 	};
 
 	void logm(float matrix[3][3]) // for logging or printing the matrix into the terminal
@@ -140,11 +140,11 @@ namespace arc
 		vec3<_type> Add(vec3<_type> v1, vec3<_type> v2)
 		{
 			vec3<_type> _out = vec3<_type>
-			(
-				v1.x + v2.x,
-				v1.y + v2.y,
-				v1.z + v2.z
-			);
+				(
+					v1.x + v2.x,
+					v1.y + v2.y,
+					v1.z + v2.z
+				);
 
 			return _out;
 		}
@@ -176,7 +176,7 @@ namespace arc
 		}
 
 		template<numeric _type>
-		float dot_product(vec3<_type> v1, vec3<_type> v2)
+		_type dot_product(vec3<_type> v1, vec3<_type> v2)
 		{
 			return v1.mag() * v2.mag() * cos(atan2(v1.mag(), v2.mag()));
 		}
@@ -197,10 +197,10 @@ namespace arc
 		vec2<_type> Add(vec2<_type> v1, vec2<_type> v2)
 		{
 			vec2<_type> _out = vec2<_type>
-			(
-				v1.x + v2.x,
-				v1.y + v2.y
-			);
+				(
+					v1.x + v2.x,
+					v1.y + v2.y
+				);
 
 			return _out;
 		}
@@ -229,7 +229,7 @@ namespace arc
 		}
 
 		template<numeric _type>
-		float dot_product(vec2<_type> v1, vec2<_type> v2)
+		_type dot_product(vec2<_type> v1, vec2<_type> v2)
 		{
 			return v1.mag() * v2.mag() * cos(atan2(v1.mag(), v2.mag()));
 		}
@@ -244,7 +244,7 @@ namespace arc
 			return _out;
 		}
 	}
-	
+
 	// time
 	namespace time
 	{
@@ -253,8 +253,8 @@ namespace arc
 			return std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::system_clock::now());
 		}
 
-		std::chrono::system_clock::time_point elapsed_init() { return std::chrono::system_clock::now();	} // initial time value
-		std::chrono::system_clock::time_point elapsed_final() {	return std::chrono::system_clock::now(); } // final time value
+		std::chrono::system_clock::time_point elapsed_init() { return std::chrono::system_clock::now(); } // initial time value
+		std::chrono::system_clock::time_point elapsed_final() { return std::chrono::system_clock::now(); } // final time value
 
 		void delay()
 		{
@@ -268,7 +268,7 @@ namespace arc
 	}
 
 	// vortex - utilities
-	
+
 	namespace vortex // TO DO: ADD MORE
 	{
 		namespace opt
@@ -279,12 +279,12 @@ namespace arc
 			public:
 				_type x, y, z;
 				shift(_type x, _type y, _type z) : x(x), y(y), z(z) {}
-			
+
 				shift operator>>(const shift& ott)
 				{
 					return shift(x = ott.y, y = ott.z, z = ott.x);
 				}
-			
+
 				void log()
 				{
 					std::cout << "(" << x << ", " << y << ", " << ")";
@@ -294,14 +294,14 @@ namespace arc
 			template<numeric _type>
 			class expo // UPDATED...
 			{
-				public:
-					_type x;
-					expo(_type x) : x(x) {}
-			
-					_type operator^(_type exponent)
-					{
-						return std::pow(x, exponent);
-					}
+			public:
+				_type x;
+				expo(_type x) : x(x) {}
+
+				_type operator^(_type exponent)
+				{
+					return std::pow(x, exponent);
+				}
 			};
 		}
 
@@ -324,7 +324,7 @@ namespace arc
 			return guess;
 		}
 
-		#define iota sqroot(-1)
+#define iota sqroot(-1)
 
 
 		// complex numbers - lets see how it goes
@@ -333,30 +333,30 @@ namespace arc
 			template<numeric _type>
 			class complex
 			{
-				public:
-					std::tuple<_type, _type> value;
-					_type re_comp, im_comp;
-					complex(_type re_comp, _type im_comp) : re_comp(re_comp), im_comp(im_comp)
-					{
-						value = std::make_tuple(re_comp, im_comp);
-					}
+			public:
+				std::tuple<_type, _type> value;
+				_type re_comp, im_comp;
+				complex(_type re_comp, _type im_comp) : re_comp(re_comp), im_comp(im_comp)
+				{
+					value = std::make_tuple(re_comp, im_comp);
+				}
 
-					_type iabs(std::tuple<_type, _type>& value)
-					{
-						return sqroot(re_comp * re_comp + im_comp * im_comp);
-					}
+				_type iabs(std::tuple<_type, _type>& value)
+				{
+					return sqroot(re_comp * re_comp + im_comp * im_comp);
+				}
 
-					void log()
-					{
-						std::string sign;
+				void log()
+				{
+					std::string sign;
 
-						if (std::get<1>(value) > 0)
-							sign = "+";
-						if (std::get<1>(value) < 0)
-							sign = "-";
+					if (std::get<1>(value) > 0)
+						sign = "+";
+					if (std::get<1>(value) < 0)
+						sign = "-";
 
-						std::cout << std::get<0>(value) << sign << std::get<1>(value) << "i" << std::endl;
-					}
+					std::cout << std::get<0>(value) << sign << std::get<1>(value) << "i" << std::endl;
+				}
 			};
 		}
 	}
@@ -373,7 +373,7 @@ namespace arc
 			if (N <= 1) return;
 
 			CArr even(N / 2), odd(N / 2);
-			
+
 			for (size_t i = 0; i < N / 2; ++i)
 			{
 				even[i] = x[i * 2];

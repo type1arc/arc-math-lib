@@ -1,0 +1,21 @@
+﻿  main.cpp
+C:\Users\Ashfaque\source\repos\arc_math_lib\arc_math_lib\main.cpp(3,6): warning C4326: return type of 'main' should be 'int' instead of 'void'
+C:\Users\Ashfaque\source\repos\arc_math_lib\arc_math_lib\arc.hpp(284,17): error C2440: '<function-style-cast>': cannot convert from 'initializer list' to 'arc::vortex::opt::swap<int>'
+  (compiling source file 'main.cpp')
+      C:\Users\Ashfaque\source\repos\arc_math_lib\arc_math_lib\arc.hpp(284,17):
+      'arc::vortex::opt::swap<int>::swap': function does not take 3 arguments
+          C:\Users\Ashfaque\source\repos\arc_math_lib\arc_math_lib\arc.hpp(284,17):
+          while trying to match the argument list '(_type, _type, _type)'
+          with
+          [
+              _type=int
+          ]
+      C:\Users\Ashfaque\source\repos\arc_math_lib\arc_math_lib\arc.hpp(284,17):
+      the template instantiation context (the oldest one first) is
+          C:\Users\Ashfaque\source\repos\arc_math_lib\arc_math_lib\main.cpp(34,30):
+          see reference to class template instantiation 'arc::vortex::opt::swap<int>' being compiled
+          C:\Users\Ashfaque\source\repos\arc_math_lib\arc_math_lib\arc.hpp(281,10):
+          while compiling class template member function 'arc::vortex::opt::swap<int> arc::vortex::opt::swap<int>::operator &&(arc::vortex::opt::swap<int> &)'
+              C:\Users\Ashfaque\source\repos\arc_math_lib\arc_math_lib\main.cpp(37,42):
+              see the first reference to 'arc::vortex::opt::swap<int>::operator &&' in 'main'
+  
