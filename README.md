@@ -37,3 +37,18 @@ git clone https://github.com/your-username/arc-math-lib.git
 ## Author
 Developed by **[type1arc](https://github.com/type1arc)**
 [![GitHub Profile](https://img.shields.io/badge/GitHub-type1arc-blue?style=flat-square&logo=github)](https://github.com/Ashfaque)
+
+## License
+Copyright 2025 type1arc
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
